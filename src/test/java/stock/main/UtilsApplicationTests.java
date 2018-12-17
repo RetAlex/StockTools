@@ -1,4 +1,4 @@
-package stock.utils;
+package stock.main;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
