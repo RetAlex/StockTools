@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 import stock.utils.RequestHelper;
 
-public class StocksInfo {
+public class StocksAPI {
     private static  final String alphavantageKey = "O28ZXN46GMIFDX27";
     public static Financials getFinancials(String symbol){
         String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/financials", null);
@@ -37,10 +37,17 @@ public class StocksInfo {
         operatingGainsLosses
     */
 
+    public static Stats getStats(String symbol){
+        String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/aapl/stats", null);
+        JSONObject answerJSON = new JSONObject(answer);
+        return new Stats();
+    }
+
     public static PriceAndVolume getPriceAndVolme(String symbol){
-        String answer = RequestHelper.getHttp("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&apikey="+alphavantageKey, null);
-        JSONObject answerJSON = new JSONObject(answer).getJSONObject("Global Quote");
-        return new PriceAndVolume(Double.parseDouble(answerJSON.getString("05. price")), Double.parseDouble(answerJSON.getString("06. volume")));
+        String answerPrice = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/price", null);
+        String answerQuote = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/quote", null);
+        JSONObject answerJSON = new JSONObject(answerQuote);
+        return new PriceAndVolume(Double.parseDouble(answerPrice), answerJSON.);
     }
 
 
@@ -60,4 +67,10 @@ public class StocksInfo {
         private double volume;
     }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Stats{
+        private double EBITDA;
+    }
 }
