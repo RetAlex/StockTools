@@ -36,4 +36,45 @@ public class CompanyStockInfo {
     public long getProfitability(){
         return getEBIT()/sales * 100; // TODO check for cast
     }
+
+
+    public Period getPeriod() {
+        return period;
+    }
+
+    public long getActionsQuantity() {
+        return actionsQuantity;
+    }
+
+    public ActionPrice getActionPrice() {
+        return actionPrice;
+    }
+
+    public long getSales() {
+        return sales;
+    }
+
+    public long getDebit() {
+        return debit;
+    }
+
+    public long getBalanceCost() {
+        return balanceCost;
+    }
+
+    public long getEarnings() {
+        return earnings;
+    }
+
+    public long getDepression() {
+        return depression;
+    }
+
+    public long getAmortization() {
+        return amortization;
+    }
+
+    public long getExpense() {
+        return expense;
+    }
 }
