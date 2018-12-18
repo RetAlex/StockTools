@@ -11,7 +11,7 @@ public class StocksAPI {
     public static Financials getFinancials(String symbol){
         String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/financials", null);
         JSONObject answerJSON = new JSONObject(answer).getJSONArray("financials").getJSONObject(0);
-        return new Financials(answerJSON.isNull("totalDebt")?0:answerJSON.getLong("totalDebt"));
+        return new Financials(answerJSON.isNull("totalDebt")?0:answerJSON.getLong("totalDebt"), answerJSON.getLong("netIncome"), answerJSON.getLong("totalRevenue"), answerJSON.getLong("shareholderEquity"), answerJSON.getLong("operatingExpense"));
     }
     /*
         Available fields to add:
@@ -37,17 +37,16 @@ public class StocksAPI {
         operatingGainsLosses
     */
 
-    public static Stats getStats(String symbol){
-        String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/aapl/stats", null);
+    public static long getEBITDA(String symbol){
+        String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/stats", null);
         JSONObject answerJSON = new JSONObject(answer);
-        return new Stats();
+        return answerJSON.getLong("EBITDA");
     }
 
     public static PriceAndVolume getPriceAndVolme(String symbol){
-        String answerPrice = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/price", null);
-        String answerQuote = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/quote", null);
-        JSONObject answerJSON = new JSONObject(answerQuote);
-        return new PriceAndVolume(Double.parseDouble(answerPrice), answerJSON.);
+        String answer = RequestHelper.getHttp("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&apikey="+alphavantageKey, null);
+        JSONObject answerJSON = new JSONObject(answer).getJSONObject("Global Quote");
+        return new PriceAndVolume(Double.parseDouble(answerJSON.getString("05. price")), Long.parseLong(answerJSON.getString("06. volume")));
     }
 
 
@@ -55,8 +54,11 @@ public class StocksAPI {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Financials{
-        //TODO add all required fields
-        private double debt;
+        private long debt;
+        private long income;
+        private long revenue;
+        private long shareholderEquity;
+        private long expense;
     }
 
     @Data
@@ -64,13 +66,6 @@ public class StocksAPI {
     @AllArgsConstructor
     public static class PriceAndVolume{
         private double price;
-        private double volume;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Stats{
-        private double EBITDA;
+        private long volume;
     }
 }

@@ -1,9 +1,13 @@
 package stock.domain;
 
-import stock.domain.utils.Period;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyStockInfo {
-
     private long actionsQuantity;
     private double actionPrice;
     private long sales;
