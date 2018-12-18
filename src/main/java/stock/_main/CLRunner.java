@@ -20,6 +20,7 @@ public class CLRunner {
             List<String> params = configs.getJSONArray("opponents").toList().stream().map(Object::toString).collect(Collectors.toList());
             params.add(company);
             Map<String, CompanyStockInfo> preparedData = new StocksService().prepareData(params);
+            System.out.println("Finished");
             //TODO add work with prepared data
         }catch (Exception e){
             Logger.getGlobal().warning("Can't finish process because of exception "+e.getClass()+"["+e.getMessage()+"]");

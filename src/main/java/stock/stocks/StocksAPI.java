@@ -13,29 +13,6 @@ public class StocksAPI {
         JSONObject answerJSON = new JSONObject(answer).getJSONArray("financials").getJSONObject(0);
         return new Financials(answerJSON.isNull("totalDebt")?0:answerJSON.getLong("totalDebt"), answerJSON.getLong("netIncome"), answerJSON.getLong("totalRevenue"), answerJSON.getLong("shareholderEquity"), answerJSON.getLong("operatingExpense"));
     }
-    /*
-        Available fields to add:
-        reportDate	string
-        grossProfit	number
-        costOfRevenue	number
-        operatingRevenue	number
-        totalRevenue	number
-        operatingIncome	number
-        netIncome	number
-        researchAndDevelopment	number
-        operatingExpense	number
-        currentAssets	number
-        totalAssets	number
-        totalLiabilities	number
-        currentCash	number
-        currentDebt	number
-        totalCash	number
-        totalDebt	number
-        shareholderEquity	number
-        cashChange	number
-        cashFlow	number
-        operatingGainsLosses
-    */
 
     public static long getEBITDA(String symbol){
         String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/stats", null);
@@ -44,9 +21,14 @@ public class StocksAPI {
     }
 
     public static PriceAndVolume getPriceAndVolme(String symbol){
-        String answer = RequestHelper.getHttp("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+symbol+"&apikey="+alphavantageKey, null);
-        JSONObject answerJSON = new JSONObject(answer).getJSONObject("Global Quote");
-        return new PriceAndVolume(Double.parseDouble(answerJSON.getString("05. price")), Long.parseLong(answerJSON.getString("06. volume")));
+        String answer = null;
+        try {
+            answer = RequestHelper.getHttp("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + alphavantageKey, null);
+            JSONObject answerJSON = new JSONObject(answer).getJSONObject("Global Quote");
+            return new PriceAndVolume(Double.parseDouble(answerJSON.getString("05. price")), Long.parseLong(answerJSON.getString("06. volume")));
+        } catch (Exception e){
+            throw new RuntimeException("While trying to fetch price and volume got invalid answer ["+answer+"]");
+        }
     }
 
 
