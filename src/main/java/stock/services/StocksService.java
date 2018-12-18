@@ -3,18 +3,22 @@ package stock.services;
 import stock.domain.CompanyStockInfo;
 import stock.stocks.StocksAPI;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class StocksService {
-    public Map<String, CompanyStockInfo> prepareData(String companyName, List<String> opponentsNames){
+    public Map<String, CompanyStockInfo> prepareData(List<String> symbols){
         Map<String, CompanyStockInfo> result = new HashMap<>();
-        result.put(companyName, prepareData(companyName));
-        for(String opponentName: opponentsNames){
+        for(String opponentName: symbols){
             result.put(opponentName, prepareData(opponentName));
         }
         return result;
+    }
+
+    public Map<String, CompanyStockInfo> prepareData(String... companies){
+        return prepareData(Arrays.asList(companies));
     }
 
     private CompanyStockInfo prepareData(String name){
