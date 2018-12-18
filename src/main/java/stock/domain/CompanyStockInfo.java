@@ -4,49 +4,34 @@ import stock.domain.utils.Period;
 
 public class CompanyStockInfo {
 
-    private Period period;
     private long actionsQuantity;
-    private ActionPrice actionPrice;
+    private double actionPrice;
     private long sales;
     private long debit;
     private long balanceCost;
     private long earnings;
-    private long depression;
-    private long amortization;
     private long expense;
+    private long EBITDA;
 
 
-
-    public long getEBIT(){
-        return sales - expense;
-    }
 
     public long getEBITDA(){
-        return getEBIT() + depression + amortization;
+        return EBITDA;
     }
 
     public long getStockCapitalCost(){
-        return actionsQuantity * actionPrice.getPrice();
+        return (long) (actionsQuantity * actionPrice);
     }
 
     public long getCompanyCost(){
         return getStockCapitalCost() + debit;
     }
 
-    public long getProfitability(){
-        return getEBIT()/sales * 100; // TODO check for cast
-    }
-
-
-    public Period getPeriod() {
-        return period;
-    }
-
     public long getActionsQuantity() {
         return actionsQuantity;
     }
 
-    public ActionPrice getActionPrice() {
+    public double getActionPrice() {
         return actionPrice;
     }
 
@@ -66,15 +51,42 @@ public class CompanyStockInfo {
         return earnings;
     }
 
-    public long getDepression() {
-        return depression;
-    }
-
-    public long getAmortization() {
-        return amortization;
-    }
 
     public long getExpense() {
         return expense;
     }
+
+    public void setEBITDA(long EBITDA) {
+        this.EBITDA = EBITDA;
+    }
+
+    public void setActionsQuantity(long actionsQuantity) {
+        this.actionsQuantity = actionsQuantity;
+    }
+
+    public void setSales(long sales) {
+        this.sales = sales;
+    }
+
+    public void setDebit(long debit) {
+        this.debit = debit;
+    }
+
+    public void setBalanceCost(long balanceCost) {
+        this.balanceCost = balanceCost;
+    }
+
+    public void setEarnings(long earnings) {
+        this.earnings = earnings;
+    }
+
+    public void setExpense(long expense) {
+        this.expense = expense;
+    }
+
+    public void setActionPrice(double actionPrice) {
+        this.actionPrice = actionPrice;
+    }
+
+
 }
