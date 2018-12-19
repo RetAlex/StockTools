@@ -23,7 +23,7 @@ public class FairPriceToolMean implements FairPriceTool {
 
     @Override
     public long getFairPrice(double a1, double a2, double a3, double a4) {
-        if((a1 + a2 + a3 + a4)==1.0) return -1;
+
         double p = a1*p1 + a2*p2 + a3*p3 + a4*p4;
 
         if(company.getActionsQuantity() <= 0) return -1;
