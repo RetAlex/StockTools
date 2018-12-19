@@ -14,21 +14,10 @@ public class StocksAPI {
         return new Financials(answerJSON.isNull("totalDebt")?0:answerJSON.getLong("totalDebt"), answerJSON.getLong("netIncome"), answerJSON.getLong("totalRevenue"), answerJSON.getLong("shareholderEquity"), answerJSON.getLong("operatingExpense"));
     }
 
-    public static long getEBITDA(String symbol){
+    public static Stats getStats(String symbol){
         String answer = RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/stats", null);
         JSONObject answerJSON = new JSONObject(answer);
-        return answerJSON.getLong("EBITDA");
-    }
-
-    public static PriceAndVolume getPriceAndVolme(String symbol){
-        String answer = null;
-        try {
-            answer = RequestHelper.getHttp("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + alphavantageKey, null);
-            JSONObject answerJSON = new JSONObject(answer).getJSONObject("Global Quote");
-            return new PriceAndVolume(Double.parseDouble(answerJSON.getString("05. price")), Long.parseLong(answerJSON.getString("06. volume")));
-        } catch (Exception e){
-            throw new RuntimeException("While trying to fetch price and volume got invalid answer ["+answer+"]");
-        }
+        return new Stats(Double.parseDouble(RequestHelper.getHttp("https://api.iextrading.com/1.0/stock/"+symbol+"/price", null)),answerJSON.getLong("sharesOutstanding"), answerJSON.getLong("EBITDA"));
     }
 
 
@@ -46,8 +35,9 @@ public class StocksAPI {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PriceAndVolume{
+    public static class Stats{
         private double price;
         private long volume;
+        private long EBITDA;
     }
 }

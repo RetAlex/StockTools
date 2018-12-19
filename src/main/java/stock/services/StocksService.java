@@ -23,7 +23,7 @@ public class StocksService {
 
     private CompanyStockInfo prepareData(String name){
         StocksAPI.Financials fin = StocksAPI.getFinancials(name);
-        StocksAPI.PriceAndVolume pav = StocksAPI.getPriceAndVolme(name);
-        return new CompanyStockInfo(pav.getVolume(), pav.getPrice(), fin.getRevenue(), fin.getDebt(), fin.getShareholderEquity(), fin.getIncome(), fin.getExpense(), StocksAPI.getEBITDA(name));
+        StocksAPI.Stats stats = StocksAPI.getStats(name);
+        return new CompanyStockInfo(stats.getVolume(), stats.getPrice(), fin.getRevenue(), fin.getDebt(), fin.getShareholderEquity(), fin.getIncome(), fin.getExpense(), stats.getEBITDA());
     }
 }
