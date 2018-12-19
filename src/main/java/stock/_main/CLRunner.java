@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CLRunner {
     public static void main(String[] args){
         try {
-            JSONObject configs = new JSONObject(new String(Files.readAllBytes(Paths.get("data.json")), StandardCharsets.UTF_8));
+            JSONObject configs = new JSONObject(new String(Files.readAllBytes(Paths.get("data2.json")), StandardCharsets.UTF_8));
             String company = configs.getString("company");
             List<String> params = configs.getJSONArray("opponents").toList().stream().map(Object::toString).collect(Collectors.toList());
             params.add(company);
@@ -41,8 +41,14 @@ public class CLRunner {
             System.out.println("P4 (P/BV) = "+priceTool.getP4());
             System.out.println("Actual P = "+ (long)(companyStockInfo.getActionPrice() * companyStockInfo.getActionsQuantity()));
 
-            System.out.println("\nFair price = "+priceTool.getFairPrice(k1,k2,k3,k4));
+            double fairPrice = priceTool.getFairPrice(k1,k2,k3,k4);
+            int sign = fairPrice - companyStockInfo.getActionPrice() > 0 ? 1 : -1;
+            int surge = (int)((fairPrice / companyStockInfo.getActionPrice())*100.0);
+
+            System.out.println("\nFair price = "+fairPrice);
             System.out.println("Actual price = "+companyStockInfo.getActionPrice());
+
+            System.out.println("Expecting " + (sign >0 ? "increase" : "decrease") + " = "+sign*surge+"%");
 
 
         }catch (Exception e){
